@@ -7,6 +7,7 @@
 #    iptables -F
 #    creates=/etc/firewall.bash
 - name: Copy firewall script into place.
+  become: yes
   template:
     src: firewall.bash.j2
     dest: /etc/firewall.bash
@@ -16,6 +17,7 @@
   notify: restart firewall
 
 - name: Copy firewall init script into place.
+  become: yes
   template:
     src: firewall.init.j2
     dest: /etc/init.d/firewall
@@ -25,6 +27,7 @@
   when: "ansible_service_mgr != 'systemd'"
 
 - name: Copy firewall systemd unit file into place (for systemd systems).
+  become: yes
   template:
     src: firewall.unit.j2
     dest: /etc/systemd/system/firewall.service
@@ -34,6 +37,7 @@
   when: "ansible_service_mgr == 'systemd'"
 
 - name: Configure the firewall service.
+  become: yes
   service:
     name: firewall
     state: "{{ firewall_state }}"
